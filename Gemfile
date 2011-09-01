@@ -10,11 +10,13 @@ gem 'sqlite3-ruby', '1.2.5', :require => 'sqlite3'
 
 # gem gravatar
 gem 'gravatar_image_tag', '1.0.0.pre2'
-
+# gem paginate
+gem 'will_paginate', '3.0.pre2'
 
 group :development do
   gem 'rspec-rails', '2.6.1'
   gem 'annotate', '2.4.0'
+  gem 'faker', '0.3.1'
 end
 
 group :test do
