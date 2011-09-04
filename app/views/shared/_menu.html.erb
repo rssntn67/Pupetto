@@ -1,0 +1,6 @@
+<% unless @menus.empty? %>
+  <table class="menus" summary="User Menu">
+    <%= render :partial => 'shared/menu_item', :collection => @menus %>
+  </table>
+  <%= will_paginate @menus %>
+<% end %>

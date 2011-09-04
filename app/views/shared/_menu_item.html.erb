@@ -1,0 +1,14 @@
+<tr>
+  <td class="menu">
+    <span class="content"><%= menu_item.content %></span>
+  </td>
+  <% if current_user?(menu_item.user) %>
+  <td class="menu">
+    <span class="action">
+    <%= link_to "delete", menu_item, :method => :delete,
+                                     :confirm => "You sure?",
+                                     :title => menu_item.content %>
+    </span>
+  </td>
+  <% end %>
+</tr>

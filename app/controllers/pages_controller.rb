@@ -7,6 +7,16 @@ class PagesController < ApplicationController
    end
   end
 
+  def menu
+   @title = "Menu"
+   if signed_in?
+     @menu = Menu.new
+     @menus = current_user.menus.paginate(:page => params[:page])
+   else
+     redirect_to root_path
+   end
+  end
+
   def contact
    @title = "Contact"
   end

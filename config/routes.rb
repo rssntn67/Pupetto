@@ -1,4 +1,5 @@
 SampleApp::Application.routes.draw do
+
   resources :users do
     member do
       get :following, :followers
@@ -7,6 +8,7 @@ SampleApp::Application.routes.draw do
 
   resources :sessions, :only => [:new, :create, :destroy]
   resources :microposts, :only => [:create, :destroy]
+  resources :menus, :only => [:create, :destroy, :edit, :update]
   resources :relationships, :only => [:create, :destroy]
 
   match '/signup',  :to => 'users#new'
@@ -17,7 +19,10 @@ SampleApp::Application.routes.draw do
   match '/about',   :to => 'pages#about'
   match '/help',    :to => 'pages#help'
 
+  match '/menu',    :to => 'pages#menu'
+
   root :to => 'pages#home'
+
   #get "pages/home"
 
   #get "pages/contact"

@@ -5,6 +5,7 @@ namespace :db do
     make_users
     make_microposts
     make_relationships
+    make_menus
   end
 end
 
@@ -42,4 +43,13 @@ def make_relationships
   followers = users[3..40]
   following.each { |followed| user.follow!(followed) }
   followers.each { |follower| follower.follow!(user) }
+end
+
+def make_menus
+    users = User.all
+    user  = users.first
+    10.times do |n|
+      content = "#{n+1} menu item"
+      user.menus.create!(:content => content)
+    end
 end

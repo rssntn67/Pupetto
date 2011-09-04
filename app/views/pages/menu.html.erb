@@ -1,0 +1,9 @@
+<table class="front" summary="For signed-in users">
+  <tr>
+    <td class="main">
+      <h1 class="menu"><%= current_user.name %> Menu</h1>
+       <%= render 'shared/menu_form' %>
+       <%= render 'shared/menu' %>
+    </td>
+  </tr>
+</table>

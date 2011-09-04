@@ -14,3 +14,8 @@ Factory.define :micropost do |micropost|
   micropost.content "Foo bar"
   micropost.association :user
 end
+
+Factory.define :menu do |menu|
+  menu.content "Foo bar"
+  menu.association :user
+end

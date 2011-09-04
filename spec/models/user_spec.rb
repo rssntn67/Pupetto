@@ -12,23 +12,23 @@
 require 'spec_helper'
 
 describe User do
-    before(:each) do
-       @attr = { :name => "Example User", 
-                 :email => "user@example.com",
-                 :password => "kloss1",
-                 :password_confirmation => "kloss1" 
-               }
-    end
+  before(:each) do
+    @attr = { :name => "Example User", 
+              :email => "user@example.com",
+              :password => "kloss1",
+              :password_confirmation => "kloss1" 
+            }
+  end
     
-    it "should create a new instance given valid attributes" do
-       User.create!(@attr)
-    end
+  it "should create a new instance given valid attributes" do
+    User.create!(@attr)
+  end
 
 
-    it "should require a name" do
-      no_name_user = User.new(@attr.merge(:name => ""))
-      no_name_user.should_not be_valid
-    end
+  it "should require a name" do
+    no_name_user = User.new(@attr.merge(:name => ""))
+    no_name_user.should_not be_valid
+  end
 
   it "should require an email address" do
     no_email_user = User.new(@attr.merge(:email => ""))
@@ -57,7 +57,6 @@ describe User do
     end
   end
 
-
   it "should reject duplicate email addresses" do
     # Put a user with given email address into the database.
     User.create!(@attr)
@@ -73,19 +72,20 @@ describe User do
   end
 
   describe "password validations" do
-     it "should require a password" do
-        User.new(@attr.merge(:password => "", :password_confirmation => "")).should_not be_valid
-     end
+
+    it "should require a password" do
+       User.new(@attr.merge(:password => "", :password_confirmation => "")).should_not be_valid
+    end
      
-     it "should require a matching pass confirm" do 
-        User.new(@attr.merge(:password_confirmation => "pippo")).should_not be_valid
-     end
+    it "should require a matching pass confirm" do 
+      User.new(@attr.merge(:password_confirmation => "pippo")).should_not be_valid
+    end
 
 
     it "should reject short password" do
-       short = "a" * 5 
-       hash = @attr.merge(:password => short, :password_confirmation => short)
-       User.new(hash).should_not be_valid
+      short = "a" * 5 
+      hash = @attr.merge(:password => short, :password_confirmation => short)
+      User.new(hash).should_not be_valid
     end
 
     it "should reject long passwords" do
@@ -158,6 +158,30 @@ describe User do
       @user.should be_admin
     end
   end
+
+  describe "menu associations" do
+
+    before(:each) do
+      @user = User.create(@attr)
+      @menu1 = Factory(:menu, :user => @user, :content => "primi piatti")
+      @menu2 = Factory(:menu, :user => @user, :content => "secondi piatti")
+    end
+
+    it "should have a menus attribute" do
+      @user.should respond_to(:menus)
+    end
+
+    it "should have the right menus in the right order" do
+      @user.menus.should == [@menu1, @menu2]
+    end
+
+    it "should destroy associated menus" do
+      @user.destroy
+      [@menu1, @menu2].each do |menu|
+        Menu.find_by_id(menu.id).should be_nil
+      end
+    end
+  end
   
   describe "micropost associations" do
 
@@ -182,12 +206,12 @@ describe User do
       end
     end
 
-   describe "status feed" do
+    describe "status feed" do
 
       it "should have a feed" do
         @user.should respond_to(:feed)
       end
-
+  
       it "should include the user's microposts" do
         @user.feed.include?(@mp1).should be_true
         @user.feed.include?(@mp2).should be_true
@@ -195,7 +219,7 @@ describe User do
 
       it "should not include a different user's microposts" do
         mp3 = Factory(:micropost,
-                      :user => Factory(:user, :email => Factory.next(:email)))
+                    :user => Factory(:user, :email => Factory.next(:email)))
         @user.feed.include?(mp3).should be_false
       end
       
@@ -206,8 +230,7 @@ describe User do
         @user.feed.should include(mp3)
       end
     end
-  end
- 
+  end 
   describe "relationships" do
 
     before(:each) do
@@ -219,7 +242,7 @@ describe User do
       @user.should respond_to(:relationships)
     end
 
-     it "should have a following method" do
+    it "should have a following method" do
       @user.should respond_to(:following)
     end
 

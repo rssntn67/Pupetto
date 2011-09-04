@@ -249,3 +249,44 @@ form.new_micropost textarea {
   height: 4em;
   margin-bottom: 0;
 }
+
+/* menu */
+
+h1.menu {
+  margin-bottom: 0.1em;
+}
+
+table.menus {
+  margin-top: 1em;
+}
+
+table.menus tr {
+  height: 50px;
+}
+
+table.menus tr td.menu {
+  border-top: 3px solid #aaa;
+  vertical-align: top;
+  padding-top: 10px;
+}
+
+table.menus tr td.menu span.content {
+  display: block;
+  font-size: 85%;
+  color: #333;
+}
+
+table.menus tr td.menu span.action {
+  display: block;
+  font-size: 85%;
+  color: #ccc;
+}
+
+form.new_menu {
+  margin-bottom: 2em;
+}
+
+form.new_menu textarea {
+  height: 1em;
+  margin-bottom: 0;
+}
