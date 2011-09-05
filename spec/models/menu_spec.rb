@@ -10,6 +10,30 @@ describe Menu do
     @user.menus.create!(@attr)
   end
 
+  describe "delivery associations" do
+    before(:each) do
+      @menu = @user.menus.create(@attr)
+      @delivery1 = Factory(:delivery, :menu => @menu)
+      @delivery2 = Factory(:delivery, :menu => @menu, :name => "ahahah")
+    end
+
+    it "should have a deliveries attribute" do
+      @menu.should respond_to(:deliveries)
+    end
+
+    it "should have the right deliveries" do
+      @menu.deliveries.should == [@delivery1,@delivery2]
+    end
+    
+    it "should destroy associated deliveries" do
+      @menu.destroy
+      [@delivery1,@delivery2].each do |delivery|
+        Delivery.find_by_id(delivery.id).should be_nil
+      end
+    end
+
+  end
+
   describe "user associations" do
 
     before(:each) do

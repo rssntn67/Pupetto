@@ -19,3 +19,11 @@ Factory.define :menu do |menu|
   menu.content "Foo bar"
   menu.association :user
 end
+
+Factory.define :delivery do |delivery|
+  delivery.name                  "Cotolette alla Milanese"
+  delivery.descr                 "Cotolette di carne di vitello impanate e fritte"
+  delivery.price                 10
+  delivery.association           :menu
+end
+

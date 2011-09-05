@@ -10,7 +10,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110902155550) do
+ActiveRecord::Schema.define(:version => 20110905084525) do
+
+  create_table "deliveries", :force => true do |t|
+    t.string   "name"
+    t.string   "descr"
+    t.integer  "menu_id"
+    t.integer  "price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "deliveries", ["menu_id"], :name => "index_deliveries_on_menu_id"
+  add_index "deliveries", ["name"], :name => "index_deliveries_on_name"
 
   create_table "menus", :force => true do |t|
     t.string   "content"
