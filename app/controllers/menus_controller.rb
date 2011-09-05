@@ -1,6 +1,6 @@
 class MenusController < ApplicationController
   before_filter :authenticate
-  before_filter :authorized_user, :only => :destroy
+  before_filter :authorized_user, :only => [:destroy, :update]
 
   def create
     @menu  = current_user.menus.build(params[:menu])
@@ -14,7 +14,22 @@ class MenusController < ApplicationController
 
   def destroy
     @menu.destroy
-    redirect_back_or root_path
+    redirect_to '/menu'
+  end
+
+  def edit
+    @title = "Edit menu"
+    @menu = Menu.find(params[:id])
+  end
+
+  def update
+      if @menu.update_attributes(params[:menu])
+        flash[:success] = "Menu updated."
+        redirect_to '/menu'
+      else
+        @title = "Edit menu"
+        render 'edit'
+      end
   end
 
 private

@@ -11,6 +11,11 @@ describe MenusController do
       response.should redirect_to(signin_path)
     end
 
+    it "should deny access to 'update'" do
+      put :update, :id => 1
+      response.should redirect_to(signin_path)
+    end
+
     it "should deny access to 'destroy'" do
       delete :destroy, :id => 1
       response.should redirect_to(signin_path)
@@ -94,6 +99,74 @@ describe MenusController do
         lambda do 
           delete :destroy, :id => @menu
         end.should change(Menu, :count).by(-1)
+      end
+    end
+  end
+
+  describe "GET 'edit'" do
+
+    before(:each) do
+      @user = Factory(:user)
+      test_sign_in(@user)
+      @menu1 = Factory(:menu, :user => @user, :content => "Foo bar")
+    end
+
+    it "should be successful" do
+      get :edit, :id => @menu1
+      response.should be_success
+    end
+
+    it "should have the right title" do
+      get :edit, :id => @menu1
+      response.should have_selector("title", :content => "Edit menu")
+    end
+  end
+
+  describe "PUT 'update'" do
+
+    before(:each) do
+      @user = Factory(:user)
+      test_sign_in(@user)
+      @menu = Factory(:menu, :user => @user, :content => "Foo bar")
+    end
+
+    describe "failure" do
+
+      before(:each) do
+        @attr = { :content => "" }
+      end
+
+      it "should render the 'edit' page" do
+        put :update, :id => @menu, :menu => @attr
+        response.should render_template('edit')
+      end
+
+      it "should have the right title" do
+        put :update, :id => @menu, :menu => @attr
+        response.should have_selector("title", :content => "Edit menu")
+      end
+    end
+
+    describe "success" do
+
+      before(:each) do
+        @attr = {:content => "barbaz" }
+      end
+
+      it "should change the user's attributes" do
+        put :update, :id => @menu, :menu => @attr
+        @menu.reload
+        @menu.content.should == @attr[:content]
+      end
+
+      it "should redirect to the menu page" do
+        put :update, :id => @menu, :menu => @attr
+        response.should redirect_to('/menu')
+      end
+
+      it "should have a flash message" do
+        put :update, :id => @menu, :menu => @attr
+       flash[:success].should =~ /updated/
       end
     end
   end

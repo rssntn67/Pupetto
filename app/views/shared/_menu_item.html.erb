@@ -5,6 +5,11 @@
   <% if current_user?(menu_item.user) %>
   <td class="menu">
     <span class="action">
+    <%= link_to "edit", edit_menu_path(menu_item) %>  
+    </span>
+  </td>
+  <td class="menu">
+    <span class="action">
     <%= link_to "delete", menu_item, :method => :delete,
                                      :confirm => "You sure?",
                                      :title => menu_item.content %>
