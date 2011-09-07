@@ -56,7 +56,7 @@ describe PagesController do
 
       it "should have the right title" do
         get :menu
-        response.should have_selector("title",:content=> @base_title + " | Menu")
+        response.should have_selector("title",:content=> @base_title + " | Set menu")
       end
 
       it "should show the user menus" do

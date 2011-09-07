@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   end
 
   def menu
-   @title = "Menu"
+   @title = "Set menu"
    if signed_in?
      @menu = Menu.new
      @delivery = Delivery.new

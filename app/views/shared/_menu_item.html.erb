@@ -17,7 +17,8 @@
   </td>
   <% end %>
 </tr>
-<td class="delivery" colspan="2">
+<tr>
+<td class="delivery" colspan="4">
 <% @delivery.menu_id = menu_item.id %>
 <%= form_for @delivery do |f| %>
      <%= f.hidden_field :menu_id %>
@@ -38,4 +39,5 @@
   </div>
 <% end %>
 </td>
+</tr>
 <%= render :partial => 'shared/delivery_item', :collection => @deliveries.shift %>

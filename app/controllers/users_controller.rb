@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   
-  before_filter :authenticate, :except => [:show, :new, :create]
+  before_filter :authenticate, :except => [:show, :new, :create, :show_menu]
   before_filter :correct_user, :only => [:edit, :update]
   before_filter :admin_user,   :only => :destroy
 
@@ -17,6 +17,20 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @users = @user.send(action).paginate(:page => params[:page])
     render 'show_follow'
+  end
+
+  def menu()
+    @title = "User menu" 
+    @user = User.find(params[:id])
+    usermenus = @user.menus
+    @menus = usermenus.paginate(:page => params[:page])
+    @deliveries = Array.new([])
+    unless usermenus.empty?
+      usermenus.each do |usermenuitem|
+        @deliveries.push(usermenuitem.deliveries)
+      end
+    end
+    render 'show_menu'
   end
 
   def destroy
