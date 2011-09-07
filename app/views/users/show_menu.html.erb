@@ -10,7 +10,7 @@
             <span class="content"><%= menu_item.content %></span>
           </td>
         </tr>
-        <%= render :partial => 'shared/delivery_item', :collection => @deliveries.shift %>
+        <%= render :partial => 'delivery_item', :collection => @deliveries.shift %>
         <% end %>
       </table>
   <%= will_paginate @menus %>
