@@ -1,0 +1,25 @@
+<tr>
+  <td class="delivery">
+    <span class="content"><%= delivery_item.name %></span>
+  </td>
+  <td class="delivery">
+    <span class="content"><%= delivery_item.descr %></span>
+  </td>
+  <td class="delivery">
+    <span class="content"><%= delivery_item.price %></span>
+  </td>
+  <% if current_user?(delivery_item.menu.user) %>
+  <td class="delivery">
+    <span class="action">
+    <%= link_to "edit", edit_delivery_path(delivery_item) %>  
+    </span>
+  </td>
+  <td class="delivery">
+    <span class="action">
+    <%= link_to "delete", delivery_item, :method => :delete,
+                                     :confirm => "You sure?",
+                                     :title => delivery_item.name %>
+    </span>
+  </td>
+  <% end %>
+</tr>

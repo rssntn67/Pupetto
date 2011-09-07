@@ -11,9 +11,17 @@ class PagesController < ApplicationController
    @title = "Menu"
    if signed_in?
      @menu = Menu.new
-     @menus = current_user.menus.paginate(:page => params[:page])
+     @delivery = Delivery.new
+     usermenus = current_user.menus
+     @menus = usermenus.paginate(:page => params[:page])
+     @deliveries = Array.new([])
+     unless usermenus.empty?
+       usermenus.each do |usermenuitem|
+         @deliveries.push(usermenuitem.deliveries)
+       end
+     end  
    else
-     redirect_to root_path
+     redirect_to signin_path
    end
   end
 

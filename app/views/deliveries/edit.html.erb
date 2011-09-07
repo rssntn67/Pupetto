@@ -1,0 +1,19 @@
+<h1> Edit menu voice</h1>
+<%= form_for @delivery do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :descr %>
+    <%= f.text_field :descr %>
+  </div>
+  <div class="field">
+    <%= f.label :price %>
+    <%= f.number_field :price %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Update Voice to Menu" %>
+  </div>
+<% end %>

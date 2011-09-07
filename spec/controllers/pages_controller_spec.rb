@@ -43,9 +43,9 @@ describe PagesController do
   describe "GET 'menu'" do
 
     describe "when not signed in" do
-      it "should redirect to home page" do
+      it "should redirect to sign in page" do
         get :menu
-        response.should redirect_to(root_path)
+        response.should redirect_to(signin_path)
       end
     end
     

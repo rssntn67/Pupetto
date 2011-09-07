@@ -1,5 +1,5 @@
 <tr>
-  <td class="menu">
+  <td colspan="3" class="menu">
     <span class="content"><%= menu_item.content %></span>
   </td>
   <% if current_user?(menu_item.user) %>
@@ -17,3 +17,25 @@
   </td>
   <% end %>
 </tr>
+<td class="delivery" colspan="2">
+<% @delivery.menu_id = menu_item.id %>
+<%= form_for @delivery do |f| %>
+     <%= f.hidden_field :menu_id %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :descr %>
+    <%= f.text_field :descr %>
+  </div>
+  <div class="field">
+    <%= f.label :price %>
+    <%= f.number_field :price %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Add Voice to Menu" %>
+  </div>
+<% end %>
+</td>
+<%= render :partial => 'shared/delivery_item', :collection => @deliveries.shift %>

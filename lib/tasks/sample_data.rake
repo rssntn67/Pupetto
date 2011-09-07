@@ -6,6 +6,7 @@ namespace :db do
     make_microposts
     make_relationships
     make_menus
+    make_deliveries
   end
 end
 
@@ -51,5 +52,13 @@ def make_menus
     10.times do |n|
       content = "#{n+1} menu item"
       user.menus.create!(:content => content)
+    end
+end
+
+def make_deliveries
+    Menu.all.each do |menuitem|
+      menuitem.deliveries.create!(:name => "piatto 1", :descr => "bla bla bla", :price => 10)
+      menuitem.deliveries.create!(:name => "piatto 2", :descr => "bla bla bla", :price => 20)
+      menuitem.deliveries.create!(:name => "piatto 3", :descr => "bla bla bla", :price => 30)
     end
 end

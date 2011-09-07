@@ -270,13 +270,29 @@ table.menus tr td.menu {
   padding-top: 10px;
 }
 
+table.menus tr td.delivery {
+  vertical-align: top;
+  padding-top: 5px;
+}
+
 table.menus tr td.menu span.content {
   display: block;
-  font-size: 85%;
   color: #333;
 }
 
+table.menus tr td.delivery span.content {
+  display: block;
+  font-size: 85%;
+  color: #669;
+}
+
 table.menus tr td.menu span.action {
+  display: block;
+  font-size: 85%;
+  color: #ccc;
+}
+
+table.menus tr td.delivery span.action {
   display: block;
   font-size: 85%;
   color: #ccc;
@@ -287,6 +303,15 @@ form.new_menu {
 }
 
 form.new_menu textarea {
+  height: 1em;
+  margin-bottom: 0;
+}
+
+form.new_delivery {
+  margin-bottom: 2em;
+}
+
+form.new_delivery textarea {
   height: 1em;
   margin-bottom: 0;
 }
