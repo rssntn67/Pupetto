@@ -1,0 +1,2 @@
+$("employ_form").update("<%= escape_javascript(render('users/employ')) %>")
+$("crew").update('<%= "#{@user.employers.count} employers" %>')

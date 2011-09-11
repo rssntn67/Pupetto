@@ -26,6 +26,15 @@ class User < ActiveRecord::Base
                                     :dependent   => :destroy
    has_many :followers, :through => :reverse_relationships, :source => :follower
  
+   has_many :workrelations, :foreign_key => "owner_id",
+                            :dependent   => :destroy
+   has_many :employers, :through => :workrelations, :source => :employer 
+
+   has_many :reverse_workrelations, :foreign_key => "employer_id",
+                                    :class_name  => "Workrelation",
+                                    :dependent   => :destroy
+   has_many :owners, :through => :reverse_workrelations, :source => :owner 
+
    email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
  
    validates :name, :presence => true,
@@ -56,6 +65,18 @@ class User < ActiveRecord::Base
    def self.authenticate_with_salt(id, cookie_salt)
      user = find_by_id(id)
      (user && user.salt == cookie_salt) ? user : nil
+   end
+
+   def employ?(employer)
+     workrelations.find_by_employer_id(employer)
+   end
+
+   def employ!(employer)
+     workrelations.create!(:employer_id => employer.id)
+   end
+
+   def unemploy!(employer)
+     workrelations.find_by_employer_id(employer).destroy
    end
 
    def following?(followed)

@@ -231,6 +231,56 @@ describe User do
       end
     end
   end 
+
+  describe "workrelations" do
+
+    before(:each) do
+      @user = User.create!(@attr)
+      @employer = Factory(:user)
+    end
+
+    it "should have a workrelations method" do
+      @user.should respond_to(:workrelations)
+    end
+
+    it "should have a employers method" do
+      @user.should respond_to(:employers)
+    end
+
+    it "should employ another user" do
+      @user.employ!(@employer)
+      @user.should be_employ(@employer)
+    end
+
+    it "should include the employer user in the employers array" do
+      @user.employ!(@employer)
+      @user.employers.should include(@employer)
+    end
+
+    it "should have an unemploy! method" do
+      @user.should respond_to(:unemploy!)
+    end
+
+    it "should unemploy a user" do
+      @user.employ!(@employer)
+      @user.unemploy!(@employer)
+      @user.should_not be_employ(@employer)
+    end
+
+    it "should have a reverse_workrelations method" do
+      @user.should respond_to(:reverse_workrelations)
+    end
+
+    it "should have an owners method" do
+      @user.should respond_to(:owners)
+    end
+
+    it "should include the owner in the owners array" do
+      @user.employ!(@employer)
+      @employer.owners.should include(@user)
+    end
+  end
+
   describe "relationships" do
 
     before(:each) do

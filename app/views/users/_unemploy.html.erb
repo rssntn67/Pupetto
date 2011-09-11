@@ -1,0 +1,4 @@
+<%= form_for current_user.workrelations.find_by_employer_id(@user),
+             :html => { :method => :delete }, :remote => true do |f| %>
+  <div class="actions"><%= f.submit "Unemploy" %></div>
+<% end %>

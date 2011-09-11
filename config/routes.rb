@@ -1,9 +1,8 @@
 SampleApp::Application.routes.draw do
 
-
   resources :users do
     member do
-      get :following, :followers, :menu
+      get :following, :followers, :crew, :menu
     end
   end
 
@@ -12,6 +11,7 @@ SampleApp::Application.routes.draw do
   resources :menus, :only => [:create, :destroy, :edit, :update]
   resources :deliveries, :only => [:create, :destroy, :edit, :update]
   resources :relationships, :only => [:create, :destroy]
+  resources :workrelations, :only => [:create, :destroy]
 
   match '/signup',  :to => 'users#new'
   match '/signin',  :to => 'sessions#new'

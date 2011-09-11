@@ -352,6 +352,11 @@ describe "PUT 'update'" do
         get :followers, :id => 1
         response.should redirect_to(signin_path)
       end
+
+      it "should protect 'crew'" do
+        get :crew, :id => 1
+        response.should redirect_to(signin_path)
+      end
     end
 
     describe "when signed in" do
@@ -359,7 +364,9 @@ describe "PUT 'update'" do
       before(:each) do
         @user = test_sign_in(Factory(:user))
         @other_user = Factory(:user, :email => Factory.next(:email))
+        @employer_user = Factory(:user, :email => Factory.next(:email))
         @user.follow!(@other_user)
+        @user.employ!(@employer_user)
       end
 
       it "should show user following" do
@@ -372,6 +379,12 @@ describe "PUT 'update'" do
         get :followers, :id => @other_user
         response.should have_selector("a", :href => user_path(@user),
                                            :content => @user.name)
+      end
+
+      it "should show employers" do
+        get :crew, :id => @user
+        response.should have_selector("a", :href => user_path(@employer_user),
+                                             :content => @employer_user.name)
       end
     end
   end

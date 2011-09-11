@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110905084525) do
+ActiveRecord::Schema.define(:version => 20110909113855) do
 
   create_table "deliveries", :force => true do |t|
     t.string   "name"
@@ -65,5 +65,16 @@ ActiveRecord::Schema.define(:version => 20110905084525) do
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+
+  create_table "workrelations", :force => true do |t|
+    t.integer  "owner_id"
+    t.integer  "employer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "workrelations", ["employer_id"], :name => "index_workrelations_on_employer_id"
+  add_index "workrelations", ["owner_id", "employer_id"], :name => "index_workrelations_on_owner_id_and_employer_id", :unique => true
+  add_index "workrelations", ["owner_id"], :name => "index_workrelations_on_owner_id"
 
 end

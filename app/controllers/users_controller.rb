@@ -11,6 +11,10 @@ class UsersController < ApplicationController
   def followers
     show_follow(:followers)
   end
+
+  def crew
+    show_follow(:employers)
+  end
   
   def show_follow(action)
     @title = action.to_s.capitalize

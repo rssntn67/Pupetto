@@ -5,7 +5,10 @@
         <%= gravatar_for @user %>
         <%= @user.name %>
       </h1>
-      <%= render 'follow_form' if signed_in? %>
+      <% if signed_in? %>
+        <%= render 'follow_form' %>
+        <%= render 'employ_form' %>
+      <% end %>
       <% unless @user.microposts.empty? %>
         <table class="microposts" summary="User microposts">
           <%= render @microposts %>

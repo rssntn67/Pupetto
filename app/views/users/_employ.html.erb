@@ -1,0 +1,5 @@
+<%= form_for current_user.workrelations.
+                          build(:employer_id => @user.id), :remote => true do |f| %>
+  <div><%= f.hidden_field :employer_id %></div>
+  <div class="actions"><%= f.submit "Employ" %></div>
+<% end %>

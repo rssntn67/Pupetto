@@ -16,6 +16,13 @@
           </span>
         </a>
       </td>
+      <td>
+        <a href="<%= crew_user_path(@user) %>">
+          <span id="crew" class="stat">
+            <%= pluralize(@user.employers.count, "employer") %>
+          </span>
+        </a>
+      </td>
     </tr>
   </table>
 </div>
