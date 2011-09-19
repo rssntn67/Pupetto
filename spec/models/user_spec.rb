@@ -232,6 +232,57 @@ describe User do
     end
   end 
 
+  describe "orders" do
+
+     before(:each) do
+       @user = User.create!(@attr)
+       @owner = Factory(:user)
+     end
+      
+     it "should have and orders method" do
+       @user.should respond_to(:orders)
+     end
+  end
+
+  describe "accounts" do
+     before(:each) do
+       @user = User.create!(@attr)
+       @owner = Factory(:user)
+       @ac1  = Factory(:account, :employer => @user, :owner => @owner, :created_at => 2.hour.ago)
+       @ac2  = Factory(:account, :employer => @user, :owner => @owner, :table => "AltroMare", :guests => 3, :created_at => 1.hour.ago)
+     end
+
+     it "should have an accounts method" do
+       @user.should respond_to(:accounts)
+     end
+
+     it "should have an owneraccounts method" do
+       @user.should respond_to(:owneraccounts)
+     end
+
+     it "should have the right account in the right order" do
+       @user.accounts.should == [@ac1, @ac2]
+     end
+
+     it "owner should have the right account in the right order" do
+       @owner.owneraccounts.should == [@ac1, @ac2]
+     end
+
+    it "should destroy associated accounts" do
+      @user.destroy
+      [@ac1, @ac2].each do |account|
+        Account.find_by_id(account.id).should be_nil
+      end
+    end
+
+    it "owner should destroy associated accounts" do
+      @owner.destroy
+      [@ac1, @ac2].each do |account|
+        Account.find_by_id(account.id).should be_nil
+      end
+    end
+  end
+
   describe "workrelations" do
 
     before(:each) do

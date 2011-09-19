@@ -27,3 +27,9 @@ Factory.define :delivery do |delivery|
   delivery.association           :menu
 end
 
+Factory.define :account do |account|
+  account.table                  "Rosa"
+  account.guests                 4 
+  account.association           :employer
+  account.association           :owner
+end

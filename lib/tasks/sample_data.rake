@@ -8,6 +8,7 @@ namespace :db do
     make_workrelations
     make_menus
     make_deliveries
+    make_accounts
   end
 end
 
@@ -73,4 +74,12 @@ def make_deliveries
       menuitem.deliveries.create!(:name => "piatto 2", :descr => "bla bla bla", :price => 20)
       menuitem.deliveries.create!(:name => "piatto 3", :descr => "bla bla bla", :price => 30)
     end
+end
+
+def make_accounts
+    users = User.all
+    owner = users.first
+    users[61..61].each { |employer| employer.accounts.create!(:owner_id => owner.id, :table => "Rosa", :guests => 10) }
+    users[62..62].each { |employer| employer.accounts.create!(:owner_id => owner.id, :table => "Margherita", :guests => 6) }
+    users[63..63].each { |employer| employer.accounts.create!(:owner_id => owner.id, :table => "Giaggiolo", :guests => 4) }
 end

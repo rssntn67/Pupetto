@@ -35,6 +35,16 @@ class User < ActiveRecord::Base
                                     :dependent   => :destroy
    has_many :owners, :through => :reverse_workrelations, :source => :owner 
 
+   has_many :accounts, :foreign_key => "employer_id",
+                               :class_name  => "Account",
+                               :dependent   => :destroy
+
+   has_many :owneraccounts, :foreign_key => "owner_id",
+                            :class_name  => "Account",
+                            :dependent   => :destroy
+
+   has_many :orders, :dependent => :destroy
+
    email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
  
    validates :name, :presence => true,
