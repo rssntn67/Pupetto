@@ -33,3 +33,9 @@ Factory.define :account do |account|
   account.association           :employer
   account.association           :owner
 end
+
+Factory.define :order do |order|
+  order.association             :user
+  order.association             :account
+  order.association             :delivery
+end

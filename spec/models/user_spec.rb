@@ -81,7 +81,6 @@ describe User do
       User.new(@attr.merge(:password_confirmation => "pippo")).should_not be_valid
     end
 
-
     it "should reject short password" do
       short = "a" * 5 
       hash = @attr.merge(:password => short, :password_confirmation => short)
@@ -248,8 +247,8 @@ describe User do
      before(:each) do
        @user = User.create!(@attr)
        @owner = Factory(:user)
-       @ac1  = Factory(:account, :employer => @user, :owner => @owner, :created_at => 2.hour.ago)
-       @ac2  = Factory(:account, :employer => @user, :owner => @owner, :table => "AltroMare", :guests => 3, :created_at => 1.hour.ago)
+       @ac1  = Factory(:account, :employer => @user, :owner => @owner, :created_at => 5.hour.ago)
+       @ac2  = Factory(:account, :employer => @user, :owner => @owner, :table => "AltroMare", :guests => 3, :created_at => 4.hour.ago)
      end
 
      it "should have an accounts method" do
@@ -268,19 +267,53 @@ describe User do
        @owner.owneraccounts.should == [@ac1, @ac2]
      end
 
-    it "should destroy associated accounts" do
-      @user.destroy
-      [@ac1, @ac2].each do |account|
-        Account.find_by_id(account.id).should be_nil
-      end
-    end
+     it "should destroy associated accounts" do
+       @user.destroy
+       [@ac1, @ac2].each do |account|
+         Account.find_by_id(account.id).should be_nil
+       end
+     end
 
-    it "owner should destroy associated accounts" do
-      @owner.destroy
-      [@ac1, @ac2].each do |account|
-        Account.find_by_id(account.id).should be_nil
-      end
-    end
+     it "owner should destroy associated accounts" do
+       @owner.destroy
+       [@ac1, @ac2].each do |account|
+         Account.find_by_id(account.id).should be_nil
+       end
+     end
+
+
+     describe "status working" do
+       before(:each) do
+         @owner.employ!(@user) 
+         @third_user = Factory(:user, :email => Factory.next(:email))
+         @owner.employ!(@third_user)
+         @ac3  = Factory(:account, :employer => @third_user, 
+                         :owner => @owner, :table => "AltaMarea", 
+                         :guests => 5, :created_at => 2.hour.ago)
+         @ac4  = Factory(:account, :employer => @third_user, 
+                         :owner => @owner, :table => "AltroMare", 
+                         :guests => 3, :created_at => 1.hour.ago)
+       end
+
+       it "should have a working method" do
+         @user.should respond_to(:working)
+       end
+       
+       it "should include the account created by all employers" do
+         @user.working.include?(@ac1).should be_true
+         @user.working.include?(@ac2).should be_true
+         @user.working.include?(@ac3).should be_true
+         @user.working.include?(@ac4).should be_true
+       end 
+
+       it "should not include an account of another owner" do
+         @another_owner = Factory(:user, :email => Factory.next(:email))
+         @ac5  = Factory(:account, :employer => @third_user, 
+                         :owner => @another_owner, :table => "AltroMare", 
+                         :guests => 3, :created_at => 1.hour.ago)
+         @user.working.include?(@ac5).should be_false 
+       end
+     end
   end
 
   describe "workrelations" do

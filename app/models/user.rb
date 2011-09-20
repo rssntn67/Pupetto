@@ -58,6 +58,10 @@ class User < ActiveRecord::Base
 
    before_save :encrypt_password
 
+   def working
+       Account.from_users_employed_with(self)
+   end
+
    def feed
        Micropost.from_users_followed_by(self)
    end

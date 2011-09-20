@@ -63,5 +63,35 @@ describe Account do
       @account.should_not be_valid
     end
   end
+
+  describe "order relation" do
+    before(:each) do
+      @menu=Factory(:menu, :user => @owner)
+
+      @delivery = Factory(:delivery, :menu => @menu)
+
+      @account.save      
+
+      @user=Factory(:user, :email => Factory.next(:email))
+      
+      @order1=Factory(:order, :user => @user, :account => @account, :delivery => @delivery, :created_at => 20.minute.ago)
+      @order2=Factory(:order, :user => @user, :account => @account, :delivery => @delivery, :created_at => 10.minute.ago)
+    end    
+  
+    it "should have an orders attribute" do
+      @account.should respond_to(:orders)
+    end
+ 
+    it "should have the right orders" do
+      @account.orders.should == [@order1, @order2]
+    end
+  
+    it "should destroy associated orders" do
+      @account.destroy
+      [@order1, @order2].each do |order|
+          Order.find_by_id(order.id).should be_nil
+      end
+    end
+  end
   
 end
