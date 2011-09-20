@@ -22,6 +22,7 @@ SampleApp::Application.routes.draw do
   match '/help',    :to => 'pages#help'
 
   match '/menu',    :to => 'pages#menu'
+  match '/working', :to => 'pages#working'
 
   root :to => 'pages#home'
 

@@ -74,6 +74,39 @@ describe PagesController do
     end
   end
 
+  describe "GET 'working'" do
+
+    describe "when not signed in" do
+      it "should redirect to sign in page" do
+        get :working
+        response.should redirect_to(signin_path)
+      end
+    end
+    
+    describe "when signed in" do
+      before(:each) do
+        @user  = Factory(:user)
+        @owner = Factory(:user, :email => Factory.next(:email))
+        @owner.employ!(@user)
+        @ac1   = Factory(:account, :employer => @user, :owner => @owner, :created_at => 5.hour.ago)
+        @ac2   = Factory(:account, :employer => @user, :owner => @owner, :table => "AltroMare", :guests => 3, :created_at => 4.hour.ago)
+        test_sign_in(@user)
+      end
+
+      it "should have the right title" do
+        get :working
+        response.should have_selector("title", :content=> @base_title + " | Working")
+      end
+
+      it "should show the user working accounts" do
+        get :working
+        response.should have_selector("span.content", :content => @ac1.table)
+        response.should have_selector("span.content", :content => @ac2.table)
+      end
+      
+    end
+  end
+
   describe "GET 'contact'" do
     it "should be successful" do
       get 'contact'

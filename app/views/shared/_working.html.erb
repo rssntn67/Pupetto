@@ -1,0 +1,10 @@
+<% unless @accounts.empty? %>
+  <table class="accounts" summary="User Working">
+    <td>table</td>
+    <td>guests</td>
+    <td>employer</td>
+    <td>owner</td>
+    <%= render :partial => 'shared/working_item', :collection => @accounts %>
+  </table>
+  <%= will_paginate @accounts %>
+<% end %>

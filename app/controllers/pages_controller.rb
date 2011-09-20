@@ -25,6 +25,16 @@ class PagesController < ApplicationController
    end
   end
 
+  def working
+   @title = "Working"
+   if signed_in?
+     @account = Account.new
+     @accounts = current_user.working.paginate(:page => params[:page])
+   else
+     redirect_to signin_path
+   end
+  end
+
   def contact
    @title = "Contact"
   end

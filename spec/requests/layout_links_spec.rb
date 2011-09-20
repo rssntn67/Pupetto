@@ -80,5 +80,20 @@ describe "LayoutLinks" do
       response.should have_selector("a", :href => "/menu",
                                          :content => "Menu")
     end
+
+    it "should have a working link" do
+      visit root_path
+      response.should have_selector("a", :href => "/working",
+                                         :content => "Working")
+    end
+
+    it "should have the right links on the layout" do
+      visit root_path
+      click_link "Menu"
+      response.should have_selector('title', :content => "Set menu")
+      click_link "Working"
+      response.should have_selector('title', :content => "Working")
+    end
+
   end
 end
