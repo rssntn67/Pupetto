@@ -1,0 +1,8 @@
+<table class="front" summary="For signed-in users">
+  <tr>
+    <td class="main">
+<h1><%= @account.owner.name %> - Table <%= @account.table %> - <%= @account.guests %> guests</h1>
+     <%= render 'shared/orders' %>
+    </td>
+  </tr>
+</table>

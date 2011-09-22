@@ -9,6 +9,7 @@ namespace :db do
     make_menus
     make_deliveries
     make_accounts
+    make_orders
   end
 end
 
@@ -82,4 +83,13 @@ def make_accounts
     users[61..61].each { |employer| employer.accounts.create!(:owner_id => owner.id, :table => "Rosa", :guests => 10) }
     users[62..62].each { |employer| employer.accounts.create!(:owner_id => owner.id, :table => "Margherita", :guests => 6) }
     users[63..63].each { |employer| employer.accounts.create!(:owner_id => owner.id, :table => "Giaggiolo", :guests => 4) }
+end
+
+def make_orders
+    users = User.all  
+    users[61..65].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 1) }
+    users[61..65].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 2) }
+    users[61..63].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 3) }
+    users[61..64].each { |employer| employer.orders.create!(:account_id => 2, :delivery_id => 2) }
+    users[61..63].each { |employer| employer.orders.create!(:account_id => 3, :delivery_id => 3) }
 end

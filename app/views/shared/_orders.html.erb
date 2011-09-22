@@ -1,0 +1,6 @@
+<% unless @orders.empty? %>
+  <table class="menus" summary="Orders Account">
+    <%= render :partial => 'shared/order_item', :collection => @orders %>
+  </table>
+  <%= will_paginate @orders %>
+<% end %>

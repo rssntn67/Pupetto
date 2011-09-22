@@ -100,8 +100,16 @@ describe PagesController do
 
       it "should show the user working accounts" do
         get :working
-        response.should have_selector("span.content", :content => @ac1.table)
-        response.should have_selector("span.content", :content => @ac2.table)
+        response.should have_selector("span.content", :content => "#{@ac1.guests}")
+        response.should have_selector("span.content", :content => "#{@ac2.guests}")
+      end
+
+      it "should have a link to account page" do
+        get :working
+        response.should have_selector("a", :href => account_path(@ac1),
+                                         :content => @ac1.table)
+        response.should have_selector("a", :href => account_path(@ac2),
+                                         :content => @ac2.table)
       end
       
     end
