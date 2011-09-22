@@ -1,12 +1,17 @@
 <div class="user_info">
+  <table summary="User Info">
+    <tr>
+      <td>
   <a href="<%= user_path(current_user) %>">
     <%= gravatar_for current_user, :size => 30 %>
     <span class="user_name">
       <%= current_user.name %>
     </span>
-<br>
+  </a>
+    <br>
     <span class="microposts">
       <%= pluralize(current_user.microposts.count, "micropost") %>
     </span>
-  </a>
+      </td>
+    </tr>
 </div>

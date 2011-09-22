@@ -238,7 +238,7 @@ div.user_info span.user_name {
 }
 
 div.user_info span.microposts {
-  font-size: 80%;
+  position: absolute;
 }
 
 form.new_micropost {

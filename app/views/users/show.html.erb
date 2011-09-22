@@ -17,9 +17,11 @@
       <% end %>
     </td>
     <td class="sidebar round">
-      <strong>Name</strong> <%= @user.name %><br />
-      <strong>Menu</strong>  <%= link_to menu_user_path(@user), menu_user_path(@user) %>
-      <strong>Microposts</strong> <%= @user.microposts.count %>
+     <strong>Microposts </strong><%= @user.microposts.count %>
+     <br>
+      <% unless @user.menus.empty? %>
+     <strong>Menus </strong><%= link_to @user.menus.count , menu_user_path(@user) %>
+      <% end %>
       <%= render 'shared/stats' %>
     </td>
   </tr>
