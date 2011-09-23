@@ -1,5 +1,5 @@
 class Order < ActiveRecord::Base
-  attr_accessible :account_id, :delivery_id
+  attr_accessible :account_id, :delivery_id, :count
 
   belongs_to :user
   belongs_to :account
@@ -8,4 +8,5 @@ class Order < ActiveRecord::Base
   validates :user_id, :presence => true
   validates :account_id, :presence => true
   validates :delivery_id, :presence => true
+  validates :count, :presence => true
 end

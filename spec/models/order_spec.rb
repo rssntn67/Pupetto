@@ -9,7 +9,7 @@ describe Order do
     @delivery = Factory(:delivery, :menu => @menu, :name => "soute di vongole", :descr => "vongole cotte in olio di oliva", :price => 15 )
     @account  = Factory(:account, :employer => @employer, :owner => @owner) 
 
-    @order    = @user.orders.build(:delivery_id => @delivery.id, :account_id => @account.id)
+    @order    = @user.orders.build(:delivery_id => @delivery.id, :account_id => @account.id, :count => 3)
   end
   
   it "should create a new instance given valid attribute" do
@@ -31,6 +31,10 @@ describe Order do
 
     it "should have a delivery attribute" do
       @order.should respond_to(:delivery) 
+    end
+ 
+    it "should have a count attribute" do
+      @order.should respond_to(:count) 
     end
  
     it "should have the right user" do
@@ -56,6 +60,11 @@ describe Order do
 
     it "should require an account_id" do
       @order.account_id=nil
+      @order.should_not be_valid
+    end
+
+    it "should require a count" do
+      @order.count=nil
       @order.should_not be_valid
     end
 

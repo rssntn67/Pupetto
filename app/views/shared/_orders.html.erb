@@ -1,5 +1,19 @@
 <% unless @orders.empty? %>
   <table class="menus" summary="Orders Account">
+    <tr>
+  <td class="menu">
+    <span class="content">Name</span>
+  </td>
+  <td class="menu">
+    <span class="content">Number</span>
+  </td>
+  <td class="menu">
+    <span class="content">Price</span>
+  </td>
+  <td class="menu">
+    <span class="content">Total</span>
+  </td>
+</tr>
     <%= render :partial => 'shared/order_item', :collection => @orders %>
   </table>
   <%= will_paginate @orders %>

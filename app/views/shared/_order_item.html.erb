@@ -3,6 +3,12 @@
     <span class="content"><%= order_item.delivery.name %></span>
   </td>
   <td class="menu">
+    <span class="content"><%= order_item.count %></span>
+  </td>
+  <td class="menu">
     <span class="content"><%= order_item.delivery.price %></span>
+  </td>
+  <td class="menu">
+    <span class="content"><%= order_item.delivery.price*order_item.count %></span>
   </td>
 </tr>

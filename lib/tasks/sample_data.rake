@@ -87,9 +87,9 @@ end
 
 def make_orders
     users = User.all  
-    users[61..65].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 1) }
-    users[61..65].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 2) }
-    users[61..63].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 3) }
-    users[61..64].each { |employer| employer.orders.create!(:account_id => 2, :delivery_id => 2) }
-    users[61..63].each { |employer| employer.orders.create!(:account_id => 3, :delivery_id => 3) }
+    users[61..61].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 1, :count => 10) }
+    users[62..62].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 2, :count => 8 ) }
+    users[63..63].each { |employer| employer.orders.create!(:account_id => 1, :delivery_id => 3, :count => 9 ) }
+    users[61..62].each { |employer| employer.orders.create!(:account_id => 2, :delivery_id => 2, :count => 2 ) }
+    users[64..65].each { |employer| employer.orders.create!(:account_id => 3, :delivery_id => 3, :count => 4 ) }
 end

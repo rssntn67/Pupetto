@@ -38,4 +38,5 @@ Factory.define :order do |order|
   order.association             :user
   order.association             :account
   order.association             :delivery
+  order.count                   1
 end

@@ -57,6 +57,17 @@ describe AccountsController do
           response.should have_selector("span.content", :content => order1.delivery.name)
           response.should have_selector("span.content", :content => order2.delivery.name)
         end
+
+        it "should show the orders count single price and total price" do
+          menu = Factory(:menu, :user => @employer)
+          del1 = Factory(:delivery, :menu => menu, :price => 11 )
+          order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
+          get :show, :id => @account
+          response.should have_selector("span.content", :content => order1.delivery.name)
+          response.should have_selector("span.content", :content => "4")
+          response.should have_selector("span.content", :content => "11")
+          response.should have_selector("span.content", :content => "44")
+        end
       end
     
       describe "access permissions" do
