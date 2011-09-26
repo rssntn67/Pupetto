@@ -28,8 +28,9 @@ class PagesController < ApplicationController
   def working
    @title = "Working"
    if signed_in?
-     @account = Account.new
+     @account = Account.new(:employer_id => current_user.id)
      @accounts = current_user.working.paginate(:page => params[:page])
+     @owners = current_user.owners
    else
      redirect_to signin_path
    end

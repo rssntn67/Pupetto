@@ -13,7 +13,7 @@ SampleApp::Application.routes.draw do
   resources :relationships, :only => [:create, :destroy]
   resources :workrelations, :only => [:create, :destroy]
 
-  resources :accounts, :only => [:show]
+  resources :accounts, :only => [:show, :create, :destroy]
 
   match '/signup',  :to => 'users#new'
   match '/signin',  :to => 'sessions#new'

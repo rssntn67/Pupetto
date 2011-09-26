@@ -8,13 +8,41 @@
     <span class="content">Guests</span>
   </td>
   <td class="accounts">
-    <span class="content">Opened By</span>
+    <span class="content">Owned By</span>
   </td>
   <td class="accounts">
-    <span class="content">Owned By</span>
+    <span class="content">Opened By</span>
   </td>
 </tr>
     <%= render :partial => 'shared/working_item', :collection => @accounts %>
-  </table>
   <%= will_paginate @accounts %>
 <% end %>
+
+<% unless @owners.empty? %>
+  <tr>
+  <%= form_for @account do |f| %>
+  <%= f.hidden_field :employer_id %>
+  <td class="accounts">
+  <div class="content">
+    <%= f.text_field :table, :size => 20 %>
+  </div>
+  </td>
+  <td class="accounts">
+  <div class="content">
+    <%= f.number_field :guests, :size => 3 %>
+  </div>
+  </td>
+  <td class="accounts">
+  <div class="content">
+    <%= f.select :owner_id, options_from_collection_for_select(@owners, :id , :name), :size => 20  %>
+  </div>
+  </td>
+  <td class="accounts">
+  <div class="actions">
+    <%= f.submit "Add Account" %>
+  </div>
+  </td>
+  <% end %>
+  </tr>
+<% end %>
+  </table>

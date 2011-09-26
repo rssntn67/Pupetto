@@ -18,26 +18,35 @@
   <% end %>
 </tr>
 <tr>
-<td class="delivery" colspan="4">
+<td class="delivery"> Name </td>
+<td class="delivery"> Description </td>
+<td class="delivery"> Price </td>
+<td class="delivery" colspan="2"> Actions </td>
+</tr>
+<tr>
 <% @delivery.menu_id = menu_item.id %>
 <%= form_for @delivery do |f| %>
      <%= f.hidden_field :menu_id %>
+<td class="delivery">
   <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, :size => 10 %>
   </div>
+</td>
+<td class="delivery">
   <div class="field">
-    <%= f.label :descr %>
-    <%= f.text_field :descr %>
+    <%= f.text_field :descr, :size => 40 %>
   </div>
+</td>
+<td class="delivery">
   <div class="field">
-    <%= f.label :price %>
-    <%= f.number_field :price %>
+    <%= f.text_field :price, :size => 3 %>
   </div>
+</td>
+<td class="delivery" colspan="2">
   <div class="actions">
     <%= f.submit "Add Voice to Menu" %>
   </div>
-<% end %>
 </td>
+<% end %>
 </tr>
 <%= render :partial => 'shared/delivery_item', :collection => @deliveries.shift %>

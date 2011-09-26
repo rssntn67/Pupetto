@@ -6,9 +6,9 @@
     <span class="content"><%= working_item.guests %></span>
   </td>
   <td class="accounts">
-    <span class="content"><%= link_to working_item.employer.name, user_path(working_item.employer) %></span>
+    <span class="content"><%= link_to working_item.owner.name, user_path(working_item.owner) %></span>
   </td>
   <td class="accounts">
-    <span class="content"><%= link_to working_item.owner.name, user_path(working_item.owner) %></span>
+    <span class="content"><%= link_to working_item.employer.name, user_path(working_item.employer) %></span>
   </td>
 </tr>

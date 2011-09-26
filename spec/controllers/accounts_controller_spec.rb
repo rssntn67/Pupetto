@@ -93,6 +93,117 @@ describe AccountsController do
         end
       end
     end
+  end
+ 
+  describe "Access Control" do
 
+    it "should deny access to 'create'" do
+      post :create
+      response.should redirect_to(signin_path)
+    end 
+
+    it "should deny access to 'destroy'" do
+      @owner = Factory(:user)
+      @employer = Factory(:user, :email => Factory.next(:email))
+      @owner.employ!(@employer)
+      @account = Factory(:account, :employer => @employer, :owner => @owner)
+      post :destroy, :id => @account
+      response.should redirect_to(signin_path)
+    end 
+  end
+
+  describe "POST 'create'" do
+
+    describe "failure" do
+      before(:each) do
+        @user = test_sign_in(Factory(:user))
+        @owner = Factory(:user, :email => Factory.next(:email))
+      end
+
+
+      it "should not create an account if user is not an employer of owner" do
+        attr = { :table => "Rosa", :guests => 10, :owner_id => @owner.id }
+        lambda do
+          post :create, :account => attr
+        end.should_not change(Account, :count)
+      end
+
+      it "should render the working page  if user is not an employer of owner" do
+        attr = { :table => "Rosa", :guests => 10, :owner_id => @owner.id }
+        post :create, :account => attr
+        response.should redirect_to root_path
+      end
+
+      it "should not create an account if the table is blank" do
+        attr = { :table => "", :guests => 10, :owner_id => @owner.id }
+        @owner.employ!(@user)
+        lambda do
+          post :create, :account => attr
+        end.should_not change(Account, :count)
+      end
+
+      it "should render the working page if the table is blank" do
+        attr = { :table => "", :guests => 10, :owner_id => @owner.id }
+        @owner.employ!(@user)
+        post :create, :account => attr
+        response.should redirect_to("/working")
+      end
+
+      it "should have a flash error if table is blank" do
+         attr = { :table => "", :guests => 10, :owner_id => @owner.id }
+         @owner.employ!(@user)
+         post :create, :account => attr
+         flash[:error].should =~ /account not created/i
+      end
+
+      it "should not create an account if the guests is blank" do
+        attr = { :table => "Rosa", :guests => "", :owner_id => @owner.id }
+        @owner.employ!(@user)
+        lambda do
+          post :create, :account => attr
+        end.should_not change(Account, :count)
+      end
+
+      it "should render the working page if the guests is blank" do
+        attr = { :table => "Rosa", :guests => "", :owner_id => @owner.id }
+        @owner.employ!(@user)
+        post :create, :account => attr
+        response.should redirect_to("/working")
+      end
+
+      it "should have a flash error if guests is blank" do
+         attr = { :table => "Rosa", :guests => "", :owner_id => @owner.id  }
+         @owner.employ!(@user)
+         post :create, :account => attr
+         flash[:error].should =~ /account not created/i
+      end
+    end
+
+    describe "success" do 
+
+      before(:each) do
+        @user = test_sign_in(Factory(:user))
+        @owner = Factory(:user, :email => Factory.next(:email))
+        @owner.employ!(@user)
+        @attr = { :table => "Rosa", :guests => 10, :owner_id => @owner.id }
+      end
+
+      it "should create an account if user is an employer of owner" do
+        lambda do
+          post :create, :account => @attr
+        end.should change(Account, :count).by(1)
+      end
+
+      it "should render the working page" do
+          post :create, :account => @attr
+          response.should redirect_to("/working")
+      end
+
+      it "should have a flash message" do
+         post :create, :account => @attr
+         flash[:success].should =~ /account created/i
+      end
+      
+    end
   end
 end
