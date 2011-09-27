@@ -4,6 +4,107 @@ require 'spec_helper'
 describe AccountsController do
 
   render_views
+  
+  describe "PUT 'update'" do
+    before(:each) do
+      @owner = Factory(:user)
+      @employer = Factory(:user, :email => Factory.next(:email))
+      @owner.employ!(@employer)
+      @account = Factory(:account, :employer => @employer, :owner => @owner)
+      @attrib = { :guests => 15, :table => "12345" }
+    end
+    
+    describe "failure" do
+      it "should render the edit page" do
+         test_sign_in(@owner)
+         @attrib[:table]=nil
+         put :update, :id => @account, :account => @attrib
+         response.should render_template('edit')
+      end
+    end
+
+    describe "success" do
+
+      it "should be successfull for owners" do
+         test_sign_in(@owner)
+         put :update, :id => @account, :account => @attrib
+         @account.reload
+         @account.table.should == @attrib[:table]
+         @account.guests.should == @attrib[:guests]
+      end 
+
+      it "should be successfull for employers" do
+         test_sign_in(@employer)
+         put :update, :id => @account, :account => @attrib
+         @account.reload
+         @account.table.should == @attrib[:table]
+         @account.guests.should == @attrib[:guests]
+      end
+  
+      it "should redirect to 'show' page"  do
+         test_sign_in(@employer)
+         put :update, :id => @account, :account => @attrib
+         response.should render_template('show')
+      end
+  
+      it "should have a flash message" do
+         test_sign_in(@employer)
+         put :update, :id => @account, :account => @attrib
+         flash[:success].should =~ /updated/
+      end
+    end
+
+    describe "access permissions" do
+      before(:each) do
+        @other_user=test_sign_in(Factory(:user, :email => Factory.next(:email)))
+      end
+
+      it "should fail for other user" do
+        put :update, :id => @account, :account => @attrib
+        @account.reload
+        @account.table.should_not == @attrib[:table]
+        @account.guests.should_not == @attrib[:guests]
+      end
+  
+      it "should redirect to 'home' for other user" do
+        put :update, :id => @account, :account => @attrib
+        response.should redirect_to(root_path)
+      end
+    end
+  end
+
+  describe "GET 'edit'" do
+    before(:each) do
+      @owner = Factory(:user)
+      @employer = Factory(:user, :email => Factory.next(:email))
+      @owner.employ!(@employer)
+      @account = Factory(:account, :employer => @employer, :owner => @owner)
+    end
+    
+    describe "when not signed" do
+      it "should redirect to sign in page" do
+        get :edit, :id => @account
+        response.should redirect_to(signin_path)    
+      end
+    end
+  
+    describe "when signed in" do
+      before(:each) do
+        test_sign_in(Factory(:user, :email => Factory.next(:email)))
+      end
+
+      it "should be successfull" do
+        get :edit, :id => @account
+        response.should be_success
+      end
+
+      it "should have the right title" do
+        get :edit, :id => @account
+        response.should have_selector("title", :content => "Edit account")
+      end
+    end
+    
+  end
 
   describe "GET 'show'" do
 
@@ -68,6 +169,12 @@ describe AccountsController do
           response.should have_selector("span.content", :content => "11")
           response.should have_selector("span.content", :content => "44")
         end
+  
+        it "should have a link to edit page" do
+          get :show, :id => @account
+          response.should have_selector("a", :href => edit_account_path(@account),
+                                         :content => "edit")
+        end
       end
     
       describe "access permissions" do
@@ -103,11 +210,22 @@ describe AccountsController do
     end 
 
     it "should deny access to 'destroy'" do
-      @owner = Factory(:user)
-      @employer = Factory(:user, :email => Factory.next(:email))
-      @owner.employ!(@employer)
-      @account = Factory(:account, :employer => @employer, :owner => @owner)
-      post :destroy, :id => @account
+      post :destroy, :id => 1
+      response.should redirect_to(signin_path)
+    end 
+
+    it "should deny access to 'update'" do
+      put :update, :id => 1
+      response.should redirect_to(signin_path)
+    end 
+
+    it "should deny access to 'edit'" do
+      get :edit, :id => 1
+      response.should redirect_to(signin_path)
+    end 
+
+    it "should deny access to 'show'" do
+      get :show, :id => 1
       response.should redirect_to(signin_path)
     end 
   end

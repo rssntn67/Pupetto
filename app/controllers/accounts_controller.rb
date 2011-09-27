@@ -1,7 +1,20 @@
 class AccountsController < ApplicationController
   before_filter :authenticate
-  before_filter :authorized_user, :only => [ :destroy, :show ]
+  before_filter :authorized_user, :only => [ :destroy, :show, :update ]
   before_filter :authorized_employer, :only => [ :create ]
+
+  def update
+    if @account.update_attributes(params[:account])
+      flash[:success] = "Account updated."
+      @title = @account.table
+      @orders = @account.orders.paginate(:page => params[:page])
+      render 'show'
+    else
+      @title = "Edit account"
+      flash[:error] = "Account not updated!"
+      render 'edit'
+    end
+  end
 
   def create
     @account  = current_user.accounts.build(params[:account])
@@ -14,11 +27,18 @@ class AccountsController < ApplicationController
   end
 
   def destroy
+     @account.destroy
+     redirect_to '/working'
   end
 
   def show
     @title = @account.table
     @orders = @account.orders.paginate(:page => params[:page])
+  end
+
+  def edit
+    @title = "Edit account"
+    @account = Account.find(params[:id])
   end
 
  private

@@ -1,0 +1,18 @@
+<h1>Edit Account</h1>
+
+<%= form_for(@account) do |f| %>
+  <%= render 'shared/error_messages', :object => f.object %>
+  <%= f.hidden_field :employer_id %>
+  <%= f.hidden_field :owner_id %>
+  <div class="field">
+    <%= f.label :table %><br />
+    <%= f.text_field :table, :size => 20 %>
+  </div>
+  <div class="field">
+    <%= f.label :guests %><br />
+    <%= f.number_field :guests, :size => 3 %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Update" %>
+  </div>
+<% end %>
