@@ -28,6 +28,7 @@ class MenusController < ApplicationController
         redirect_to '/menu'
       else
         @title = "Edit menu"
+        flash[:error] = "Menu not updated!"
         render 'edit'
       end
   end
