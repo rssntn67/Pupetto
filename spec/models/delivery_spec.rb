@@ -53,4 +53,32 @@ describe Delivery do
       @menu.deliveries.build(:name => "a" * 61 ).should_not be_valid
     end
   end
+  
+  describe "order relation" do
+    before(:each) do
+      @employer = Factory(:user, :email => Factory.next(:email))
+      @other_employer = Factory(:user, :email => Factory.next(:email))
+      @user.employ!(@employer)
+      @user.employ!(@other_employer)
+      @account = Factory(:account, :owner => @user, :employer => @employer)
+      @delivery = Factory(:delivery, :menu => @menu)
+      @order1 = Factory(:order, :user => @employer, :delivery => @delivery, :account => @account)
+      @order2 = Factory(:order, :user => @other_employer, :delivery => @delivery, :account => @account)
+    end
+
+    it "should have a orders attribute" do
+       @delivery.should respond_to(:orders)
+    end
+
+    it "should have the right deliveries" do
+      @delivery.orders.should == [@order1, @order2]
+    end
+
+    it "should destroy associated deliveries" do
+      @delivery.destroy
+       [@order1, @order2].each do |order|
+          Order.find_by_id(order.id).should be_nil
+       end
+    end
+  end
 end
