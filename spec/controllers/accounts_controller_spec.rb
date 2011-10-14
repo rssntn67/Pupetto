@@ -295,7 +295,8 @@ describe AccountsController do
           order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
           order2 = Factory(:order, :user => @employer, :account => @account, :delivery => del2, :count => 2 )
           get :show, :id => @account
-          response.should have_selector("a", :href => account_path(@account), :"data-method" => "delete")
+          response.should have_selector("form", :action => account_path(@account))
+          response.should have_selector("input", :name => "_method", :value => "delete")
         end
       end
 

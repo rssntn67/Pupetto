@@ -36,7 +36,7 @@
     <span class="content">Discount</span>
   </td>
   <td class="menu" colspan="2">
-    <input type="text" value="15" id="discount"/>%
+    <input type="text" size="2"  maxlength="2" value="15" id="discount"/>%
   </td>
   <td class="menu">
       <span class="content" id="discountvalue" />
@@ -47,15 +47,22 @@
     <span class="content">Taxes</span>
   </td>
   <td class="menu" colspan="2">
-    <input type="text" value="10" id="taxes" />%
+    <input type="text" size="2" maxlength="2" value="10" id="taxes" />%
   </td>
   <td class="menu">
       <span class="content" id="taxvalue" />
   </td>
   </tr>
     <tr>
-  <td class="menu" colspan="3">
+  <td class="menu" colspan="1">
       <input type="button" id="summer" value="Bill" />
+  </td>
+  <td class="menu" colspan="1">
+ <%= button_to "Destroy", { :action => "destroy", :id => @account.id },
+            :confirm => "Are you sure?", :method => :delete %>
+  </td>
+  <td class="menu" colspan="1">
+      <input id="print" type="hidden" />
   </td>
   <td class="menu">
       <span class="content" id="sum" />
@@ -68,6 +75,9 @@
 <% end %>
 
 <script type="text/javascript">
+    document.getElementById('print').onclick=function() {
+       window.print();
+    };
     document.getElementById('summer').onclick= function() {
          var sum=0;
          var total = document.getElementById('total').innerHTML;
@@ -85,5 +95,8 @@
          document.getElementById('sum').innerHTML= sum;
          document.getElementById('taxvalue').innerHTML= taxvalue;
          document.getElementById('discountvalue').innerHTML= discountvalue;
+         var printElement=document.getElementById('print');
+         printElement.value="Print";
+         printElement.type="Button";
     };
 </script>
