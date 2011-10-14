@@ -82,15 +82,6 @@
          var discountvalue = total * discountperc / 100;
          var taxvalue = total * taxperc / 100;
          sum = total - discountvalue + taxvalue;
-/*
-         #for (var i= inputs.length; i-->0;) {
-             #var v= inputs[i].value.split(',').join('.').split(' ').join('');
-             #if (isNaN(+v))
-                 #alert(inputs[i].value+' is not a readable number');
-             #else
-                 #sum+= +v;
-         #}
-*/
          document.getElementById('sum').innerHTML= sum;
          document.getElementById('taxvalue').innerHTML= taxvalue;
          document.getElementById('discountvalue').innerHTML= discountvalue;

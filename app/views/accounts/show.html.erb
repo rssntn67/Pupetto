@@ -1,7 +1,16 @@
 <table class="front" summary="For signed-in users">
   <tr>
     <td class="main">
-<h1>Table <%= @account.table %> (<%= link_to "edit", edit_account_path(@account) %>) - <%= @account.guests %> guests </h1>
+<h1>Table <%= @account.table %> (<%= link_to "edit", edit_account_path(@account) %>
+  <% if current_user.id == @account.owner_id %>
+    )( 
+    <span class="action">
+    <%= link_to "delete", @account, :method => :delete,
+                                     :confirm => "You sure?",
+                                     :title => @account.table %>
+    </span>
+   <% end %>
+) - <%= @account.guests %> guests </h1>
 <br>Owner: <%= @account.owner.name %> </br>
      <%= render 'shared/orders' %>
     </td>

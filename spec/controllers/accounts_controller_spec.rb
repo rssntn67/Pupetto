@@ -4,7 +4,48 @@ require 'spec_helper'
 describe AccountsController do
 
   render_views
-  
+  describe "DELETE 'destroy'" do
+    describe "for an unauthorized user" do
+
+      before(:each) do
+        @owner = Factory(:user)
+        @employer = Factory(:user, :email => Factory.next(:email))
+        @owner.employ!(@employer)
+        @account = Factory(:account, :employer => @employer, :owner => @owner)
+      end
+
+      it "should deny access to users" do
+        wrong_user = Factory(:user, :email => Factory.next(:email))
+        test_sign_in(wrong_user)
+        delete :destroy, :id => @account
+        response.should redirect_to(root_path)
+      end
+
+      it "should deny access to employers" do
+        test_sign_in(@employer)
+        delete :destroy, :id => @account
+        response.should redirect_to("/working")
+      end
+    end
+
+     describe "for an authorized user" do
+
+      before(:each) do
+        @owner = test_sign_in(Factory(:user))
+        @employer = Factory(:user, :email => Factory.next(:email))
+        @owner.employ!(@employer)
+        @account = Factory(:account, :employer => @employer, :owner => @owner)
+      end
+
+      it "owner should destroy the account" do
+        lambda do
+          delete :destroy, :id => @account
+        end.should change(Account, :count).by(-1)
+      end
+    end
+
+  end 
+
   describe "PUT 'update'" do
     before(:each) do
       @owner = Factory(:user)
@@ -233,9 +274,28 @@ describe AccountsController do
           order2 = Factory(:order, :user => @employer, :account => @account, :delivery => del2, :count => 2 )
           get :show, :id => @account
           response.should have_selector("span.content", :content => "74")
+          response.should have_selector("input", :id => "discount")
+          response.should have_selector("input", :id => "taxes")
         end
 
-        it "should have the bill/destroy button" do 
+        it "should have the bill button" do 
+          menu = Factory(:menu, :user => @owner)
+          del1 = Factory(:delivery, :menu => menu, :price => 11 )
+          del2 = Factory(:delivery, :menu => menu, :price => 15 )
+          order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
+          order2 = Factory(:order, :user => @employer, :account => @account, :delivery => del2, :count => 2 )
+          get :show, :id => @account
+          response.should have_selector("input", :id => "summer", :type => "button", :value => "Bill")
+        end
+
+        it "should have the delete link" do 
+          menu = Factory(:menu, :user => @owner)
+          del1 = Factory(:delivery, :menu => menu, :price => 11 )
+          del2 = Factory(:delivery, :menu => menu, :price => 15 )
+          order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
+          order2 = Factory(:order, :user => @employer, :account => @account, :delivery => del2, :count => 2 )
+          get :show, :id => @account
+          response.should have_selector("a", :href => account_path(@account), :"data-method" => "delete")
         end
       end
 
