@@ -5,16 +5,94 @@
     <span class="content">Name</span>
   </td>
   <td class="menu">
-    <span class="content">Number</span>
+    <span class="content">Quantity</span>
   </td>
+  <% if current_user.id == @account.owner_id %>
   <td class="menu">
     <span class="content">Price</span>
   </td>
   <td class="menu">
     <span class="content">Total</span>
   </td>
-</tr>
-    <%= render :partial => 'shared/order_item', :collection => @orders %>
+  <% end %>
+   </tr>
+  <%= render :partial => 'shared/order_item', :collection => @orders %>
+  <% if current_user.id == @account.owner_id %>
+    <tr>
+  <td class="menu" colspan="4">
+    &nbsp; Billing! 
+  </td>
+  </tr>
+    <tr>
+  <td class="menu" colspan="3">
+    <span class="content">Partial Total</span>
+  </td>
+  <td class="menu">
+    <span class="content" id="total" value="<%= @total %>"><%= @total %></span>
+  </td>
+  </tr>
+    <tr>
+  <td class="menu">
+    <span class="content">Discount</span>
+  </td>
+  <td class="menu" colspan="2">
+    <input type="text" value="15" id="discount"/>%
+  </td>
+  <td class="menu">
+      <span class="content" id="discountvalue" />
+  </td>
+  </tr>
+    <tr>
+  <td class="menu">
+    <span class="content">Taxes</span>
+  </td>
+  <td class="menu" colspan="2">
+    <input type="text" value="10" id="taxes" />%
+  </td>
+  <td class="menu">
+      <span class="content" id="taxvalue" />
+  </td>
+  </tr>
+    <tr>
+  <td class="menu" colspan="3">
+      <input type="button" id="summer" value="Bill" />
+  </td>
+  <td class="menu">
+      <span class="content" id="sum" />
+  </td>
+  </tr>
+  <% end %>
+
   </table>
   <%= will_paginate @orders %>
 <% end %>
+
+<script type="text/javascript">
+    document.getElementById('summer').onclick= function() {
+         var sum=0;
+         var total = document.getElementById('total').innerHTML;
+             if (isNaN(+total))
+                 alert(total+' is not a readable number');
+         var discountperc= document.getElementById('discount').value;
+             if (isNaN(+discountperc))
+                 alert(discountperc+' is not a readable number');
+         var taxperc= document.getElementById('taxes').value;
+             if (isNaN(+taxperc))
+                 alert(taxperc+' is not a readable number');
+         var discountvalue = total * discountperc / 100;
+         var taxvalue = total * taxperc / 100;
+         sum = total - discountvalue + taxvalue;
+/*
+         #for (var i= inputs.length; i-->0;) {
+             #var v= inputs[i].value.split(',').join('.').split(' ').join('');
+             #if (isNaN(+v))
+                 #alert(inputs[i].value+' is not a readable number');
+             #else
+                 #sum+= +v;
+         #}
+*/
+         document.getElementById('sum').innerHTML= sum;
+         document.getElementById('taxvalue').innerHTML= taxvalue;
+         document.getElementById('discountvalue').innerHTML= discountvalue;
+    };
+</script>

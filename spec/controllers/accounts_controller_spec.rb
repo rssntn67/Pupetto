@@ -123,7 +123,7 @@ describe AccountsController do
     end
 
     describe "when signed in" do
-      describe "page layout" do
+      describe "employer page layout" do
         before(:each) do
           test_sign_in(@employer)
         end
@@ -159,15 +159,13 @@ describe AccountsController do
           response.should have_selector("span.content", :content => order2.delivery.name)
         end
 
-        it "should show the orders count single price and total price" do
+        it "should show the orders count" do
           menu = Factory(:menu, :user => @employer)
           del1 = Factory(:delivery, :menu => menu, :price => 11 )
           order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
           get :show, :id => @account
           response.should have_selector("span.content", :content => order1.delivery.name)
           response.should have_selector("span.content", :content => "4")
-          response.should have_selector("span.content", :content => "11")
-          response.should have_selector("span.content", :content => "44")
         end
   
         it "should have a link to edit page" do
@@ -199,6 +197,48 @@ describe AccountsController do
            response.should redirect_to(root_path)
         end
       end
+
+      describe "owner page layout" do
+        before(:each) do
+          test_sign_in(@owner)
+        end
+
+        it "should show the orders list" do
+          menu = Factory(:menu, :user => @employer)
+          del1 = Factory(:delivery, :menu => menu)
+          del2 = Factory(:delivery, :menu => menu, :name => "Spaghetti al Sugo")
+          order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1)
+          order2 = Factory(:order, :user => @owner, :account => @account, :delivery => del2)
+          get :show, :id => @account
+          response.should have_selector("span.content", :content => order1.delivery.name)
+          response.should have_selector("span.content", :content => order2.delivery.name)
+        end
+
+        it "should show the orders count" do
+          menu = Factory(:menu, :user => @employer)
+          del1 = Factory(:delivery, :menu => menu, :price => 11 )
+          order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
+          get :show, :id => @account
+          response.should have_selector("span.content", :content => order1.delivery.name)
+          response.should have_selector("span.content", :content => "4")
+          response.should have_selector("span.content", :content => "11")
+          response.should have_selector("span.content", :content => "44")
+        end
+  
+        it "should show the discount, total and service cost" do
+          menu = Factory(:menu, :user => @owner)
+          del1 = Factory(:delivery, :menu => menu, :price => 11 )
+          del2 = Factory(:delivery, :menu => menu, :price => 15 )
+          order1 = Factory(:order, :user => @employer, :account => @account, :delivery => del1, :count => 4 )
+          order2 = Factory(:order, :user => @employer, :account => @account, :delivery => del2, :count => 2 )
+          get :show, :id => @account
+          response.should have_selector("span.content", :content => "74")
+        end
+
+        it "should have the bill/destroy button" do 
+        end
+      end
+
     end
   end
  

@@ -5,10 +5,12 @@
   <td class="menu">
     <span class="content"><%= order_item.count %></span>
   </td>
+ <% if current_user.id == @account.owner_id %>
   <td class="menu">
     <span class="content"><%= order_item.delivery.price %></span>
   </td>
   <td class="menu">
     <span class="content"><%= order_item.delivery.price*order_item.count %></span>
   </td>
+<% end %>
 </tr>

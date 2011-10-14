@@ -8,6 +8,7 @@ class AccountsController < ApplicationController
       flash[:success] = "Account updated."
       @title = @account.table
       @orders = @account.orders.paginate(:page => params[:page])
+      @total = calculate_total
       render 'show'
     else
       @title = "Edit account"
@@ -34,6 +35,7 @@ class AccountsController < ApplicationController
   def show
     @title = @account.table
     @orders = @account.orders.paginate(:page => params[:page])
+    @total = calculate_total
   end
 
   def edit
@@ -50,5 +52,13 @@ class AccountsController < ApplicationController
 
   def authorized_employer
      redirect_to root_path unless (current_user.owners.include?(User.find(params[:account][:owner_id])))
+  end
+ 
+  def calculate_total
+      value = 0
+      @account.orders.each do |order|
+         value = value + order.delivery.price * order.count
+      end
+      return value
   end
 end
