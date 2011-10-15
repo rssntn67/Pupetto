@@ -10,6 +10,7 @@ class OrdersController < ApplicationController
       else
           @order.update_attributes(:count => @order.count + 1)
       end
+      redirect_to order_account_path(@account)
   end
 
   def decrease
@@ -20,6 +21,7 @@ class OrdersController < ApplicationController
           @order.update_attributes(:count => @order.count - 1)
        end
      end
+     redirect_to order_account_path(@account)
   end
 
  private

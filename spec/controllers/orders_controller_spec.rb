@@ -32,25 +32,19 @@ describe OrdersController do
     it "should be successful" do
       test_sign_in(@employer)
       post 'increase', :id=> @account.id, :order => @attr 
-      response.should be_success
+      response.should redirect_to(order_account_path(@account))
     end
 
     it "should grant access to owner" do
       test_sign_in(@owner)
       post 'increase', :id=> @account.id, :order => @attr 
-      response.should be_success
+      response.should redirect_to(order_account_path(@account))
     end
 
     it "should deny access to others" do
       test_sign_in(Factory(:user, :email => Factory.next(:email)))
       post 'increase', :id=> @account.id, :order => @attr 
       response.should redirect_to(root_path)
-    end
-
-    it "should be successful" do
-      test_sign_in(@employer)
-      post 'increase', :id=> @account.id, :order => @attr 
-      response.should be_success
     end
 
     it "should create the order with count 1 if it is 0" do
@@ -83,13 +77,13 @@ describe OrdersController do
     it "should be successful" do
       test_sign_in(@employer)
       post 'decrease', :id => @account.id, :order => @attr 
-      response.should be_success
+      response.should redirect_to(order_account_path(@account))
     end
 
     it "should grant access to owner" do
       test_sign_in(@owner)
       post 'decrease', :id=> @account.id, :order => @attr 
-      response.should be_success
+      response.should redirect_to(order_account_path(@account))
     end
 
     it "should deny access to others" do
