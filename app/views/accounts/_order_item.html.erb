@@ -1,11 +1,24 @@
 <tr>
   <td class="delivery">
-    <span class="content"><%= order_item.name %></span>
+    <span class="content"><%= order_item.delivery.name %></span>
   </td>
   <td class="delivery">
-    <span class="content">+</span>
+    <span class="content"><%= order_item.count %></span>
   </td>
   <td class="delivery">
-    <span class="content">-</span>
+<%= form_for order_item, :url => { :controller => "orders", :action => "increase" }, do |f| %>
+  <div><%= f.hidden_field :delivery_id %></div>
+  <div><%= f.hidden_field :account_id %></div>
+  <div><%= f.hidden_field :count %></div>
+  <div class="actions"><%= f.submit "+" %></div>
+<% end %>
+  </td>
+  <td class="delivery">
+<%= form_for order_item, :url => { :controller => "orders", :action => "decrease" } do |f| %>
+  <div><%= f.hidden_field :delivery_id %></div>
+  <div><%= f.hidden_field :account_id %></div>
+  <div><%= f.hidden_field :count %></div>
+  <div class="actions"><%= f.submit "-" %></div>
+<% end %>
   </td>
 </tr>

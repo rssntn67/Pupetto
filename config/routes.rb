@@ -1,13 +1,5 @@
 SampleApp::Application.routes.draw do
 
-  get "orders/create"
-
-  get "orders/destroy"
-
-  get "orders/increase"
-
-  get "orders/decrease"
-
   resources :users do
     member do
       get :following, :followers, :crew, :menu
@@ -20,14 +12,19 @@ SampleApp::Application.routes.draw do
     end
   end
 
+  resources :orders do
+    member do
+      post :increase, :decrease
+      put :increase, :decrease
+    end
+  end
+
   resources :sessions, :only => [:new, :create, :destroy]
   resources :microposts, :only => [:create, :destroy]
   resources :menus, :only => [:create, :destroy, :edit, :update]
   resources :deliveries, :only => [:create, :destroy, :edit, :update]
   resources :relationships, :only => [:create, :destroy]
   resources :workrelations, :only => [:create, :destroy]
-
-  #resources :accounts, :only => [:show, :create, :destroy, :edit, :update, :order]
 
   match '/signup',  :to => 'users#new'
   match '/signin',  :to => 'sessions#new'

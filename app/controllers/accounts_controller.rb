@@ -8,10 +8,18 @@ class AccountsController < ApplicationController
     @title = "Order " + @account.table
     usermenus = @account.owner.menus
     @menus = usermenus.paginate(:page => params[:page])
-    @orders = Array.new([])
+    @deliveries = Array.new([])
     unless usermenus.empty?
       usermenus.each do |usermenuitem|
-        @orders.push(usermenuitem.deliveries)
+        orders = Array.new([])
+        usermenuitem.deliveries.each do |delivery|
+           order = Order.find_by_account_id_and_delivery_id(@account.id, delivery.id )
+           if order.nil?
+              order = current_user.orders.build(:delivery_id => delivery.id, :account_id => @account.id, :count => 0)
+           end
+           orders.push(order)
+        end
+        @deliveries.push(orders)
       end
     end
     render 'order'
@@ -70,7 +78,7 @@ class AccountsController < ApplicationController
  
   def is_owner
      @account = Account.find(params[:id])
-     redirect_to root_path unless current_user?(@account.owner)
+     redirect_to root_path  unless current_user?(@account.owner)
   end
  
   def calculate_total

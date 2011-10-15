@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110922140140) do
+ActiveRecord::Schema.define(:version => 20111015172448) do
 
   create_table "accounts", :force => true do |t|
     t.integer  "employer_id"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(:version => 20110922140140) do
     t.integer  "count"
   end
 
+  add_index "orders", ["account_id", "delivery_id"], :name => "index_orders_on_account_id_and_delivery_id", :unique => true
   add_index "orders", ["account_id"], :name => "index_orders_on_account_id"
   add_index "orders", ["delivery_id"], :name => "index_orders_on_delivery_id"
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"

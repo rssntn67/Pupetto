@@ -1,16 +1,17 @@
 <table class="front" summary="For signed-in users">
   <tr>
     <td class="main">
-      <b><%= @account.table %> Order</b> - Owned by: <%= @account.owner.name %> - Guests: <%= @account.guests %>
+      Account: <%= link_to @account.table, account_path(@account) %> - Owned by: <%= @account.owner.name %> - Guests: <%= @account.guests %>
+      <h1>Order</h1>
         <% unless @menus.empty? %>
         <table class="menus" summary="User Menu">
         <% @menus.each do |menu_item| %>       
         <tr>
-          <td colspan="3" class="menu">
+          <td colspan="4" class="menu">
             <span class="content"><%= menu_item.content %></span>
           </td>
         </tr>
-        <%= render :partial => 'order_item', :collection => @orders.shift %>
+        <%= render :partial => 'order_item', :collection => @deliveries.shift %>
         <% end %>
       </table>
   <%= will_paginate @menus %>

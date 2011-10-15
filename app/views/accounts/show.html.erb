@@ -1,9 +1,8 @@
 <table class="front" summary="For signed-in users">
   <tr>
     <td class="main">
-<h1>Table <%= @account.table %> (<%= link_to "edit", edit_account_path(@account) %>) - <%= @account.guests %> guests </h1>
-<br>Owner: <%= @account.owner.name %> </br>
-<br><%= link_to "Order", order_account_path(@account) %></br>
+Owner: <%= @account.owner.name %> - <%= link_to "order", order_account_path(@account) %>
+<h1>Account: <%= @account.table %>(<%= link_to "edit", edit_account_path(@account) %>) - <%= @account.guests %> guests </h1>
      <%= render 'shared/orders' %>
     </td>
   </tr>

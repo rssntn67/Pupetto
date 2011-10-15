@@ -217,7 +217,8 @@ describe AccountsController do
 
       it "should have a link to order " do
          get :show, :id => @account
-           response.should have_selector("a", :href => order_account_path(@account)),
+           response.should have_selector("a", :href => order_account_path(@account),
+                                          :content => "order")
       end
     end 
 
@@ -456,6 +457,8 @@ describe AccountsController do
         @employer = Factory(:user, :email => Factory.next(:email))
         @owner.employ!(@employer)
         @account = Factory(:account, :employer => @employer, :owner => @owner)
+        @order1 = Factory(:order,:user => @employer,:account => @account,:delivery => @del1) 
+        @order2 = Factory(:order,:user => @employer,:account => @account,:delivery => @del2, :count => "11") 
         test_sign_in(@employer)
       end
 
@@ -469,29 +472,31 @@ describe AccountsController do
         response.should have_selector("title", :content => "Order " + @account.table)
       end
 
-      it "should have the owner menu" do
+      it "should have menus deliveries and counts" do
         get :order, :id => @account
+        response.should have_selector("span.content", :content => @menu.content)
+        response.should have_selector("span.content", :content => @del1.name)
+        response.should have_selector("span.content", :content => @del2.name)
+        response.should have_selector("span.content", :content => "1")
+        response.should have_selector("span.content", :content => "11")
       end
       
       it "should have increase button" do
         get :order, :id => @account
+        response.should have_selector("form", :action => increase_order_path(@account))
       end
 
       it "should have have decrease button" do
+        order = Factory(:order,:user => @employer,:account => @account,:delivery => @del1) 
         get :order, :id => @account
+        response.should have_selector("form", :action => decrease_order_path(@account))
       end
-
-      it "should show the right order count" do
-        get :order, :id => @account
-      end 
 
       it "should have the account link" do
          get :order, :id => @account
+         response.should have_selector("a", :href => account_path(@account))
       end
 
-      it "should have the working link" do
-         get :order, :id => @account
-      end
     end
    
     describe "access control" do
