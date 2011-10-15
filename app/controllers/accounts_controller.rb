@@ -1,7 +1,21 @@
 class AccountsController < ApplicationController
   before_filter :authenticate
-  before_filter :authorized_user, :only => [ :destroy, :show, :update ]
+  before_filter :authorized_user, :only => [ :show, :update, :order ]
   before_filter :authorized_employer, :only => [ :create ]
+  before_filter :is_owner, :only => [ :destroy ]
+
+  def order
+    @title = "Order " + @account.table
+    usermenus = @account.owner.menus
+    @menus = usermenus.paginate(:page => params[:page])
+    @orders = Array.new([])
+    unless usermenus.empty?
+      usermenus.each do |usermenuitem|
+        @orders.push(usermenuitem.deliveries)
+      end
+    end
+    render 'order'
+  end
 
   def update
     if @account.update_attributes(params[:account])
@@ -52,6 +66,11 @@ class AccountsController < ApplicationController
 
   def authorized_employer
      redirect_to root_path unless (current_user.owners.include?(User.find(params[:account][:owner_id])))
+  end
+ 
+  def is_owner
+     @account = Account.find(params[:id])
+     redirect_to root_path unless current_user?(@account.owner)
   end
  
   def calculate_total

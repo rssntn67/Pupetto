@@ -3,6 +3,7 @@
     <td class="main">
 <h1>Table <%= @account.table %> (<%= link_to "edit", edit_account_path(@account) %>) - <%= @account.guests %> guests </h1>
 <br>Owner: <%= @account.owner.name %> </br>
+<br><%= link_to "Order", order_account_path(@account) %></br>
      <%= render 'shared/orders' %>
     </td>
   </tr>
