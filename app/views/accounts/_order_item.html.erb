@@ -3,10 +3,10 @@
     <span class="content"><%= order_item.delivery.name %></span>
   </td>
   <td class="delivery">
-    <span class="content"><%= order_item.count %></span>
+    <span id="delivery_id_<%=order_item.delivery.id %>" class="content"><%= order_item.count %></span>
   </td>
   <td class="delivery">
-<%= form_for order_item, :url => { :controller => "orders", :action => "increase" }, do |f| %>
+<%= form_for order_item, :url => { :controller => "orders", :action => "increase" }, :remote => true do |f| %>
   <div><%= f.hidden_field :delivery_id %></div>
   <div><%= f.hidden_field :account_id %></div>
   <div><%= f.hidden_field :count %></div>
@@ -14,11 +14,15 @@
 <% end %>
   </td>
   <td class="delivery">
-<%= form_for order_item, :url => { :controller => "orders", :action => "decrease" } do |f| %>
+<%= form_for order_item, :url => { :controller => "orders", :action => "decrease" }, :remote => true do |f| %>
   <div><%= f.hidden_field :delivery_id %></div>
   <div><%= f.hidden_field :account_id %></div>
   <div><%= f.hidden_field :count %></div>
-  <div class="actions"><%= f.submit "-" %></div>
+  <div id="submit_minus_<%=order_item.delivery.id %>" class="actions">
+  <% if order_item.count > 0 %>
+     <%= f.submit "-" %>
+  <% end %> 
+  </div>
 <% end %>
   </td>
 </tr>

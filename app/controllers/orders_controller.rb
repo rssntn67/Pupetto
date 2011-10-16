@@ -1,6 +1,8 @@
 class OrdersController < ApplicationController
   before_filter :authenticate
   before_filter :authorized_user
+  
+  respond_to :html, :js
 
   def increase
       if (@order.nil?)
@@ -10,18 +12,20 @@ class OrdersController < ApplicationController
       else
           @order.update_attributes(:count => @order.count + 1)
       end
-      redirect_to order_account_path(@account)
+      respond_with(@order, :location => order_account_path(@account))
   end
 
   def decrease
-     unless (@order.nil?)
-       if (@order.count == 1 )
-          @order.destroy
-       else
-          @order.update_attributes(:count => @order.count - 1)
-       end
-     end
-     redirect_to order_account_path(@account)
+      unless (@order.nil?)
+        if (@order.count == 1 )
+            @order.destroy
+            @order = current_user.orders.build(params[:order])
+            @order.count = 0
+        else
+           @order.update_attributes(:count => @order.count - 1)
+        end
+      end
+      respond_with(@order, :location => order_account_path(@account))
   end
 
  private

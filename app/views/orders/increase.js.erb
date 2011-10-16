@@ -1,0 +1,4 @@
+$("delivery_id_<%= @order.delivery.id %>").update('<%=@order.count%>')
+<% if @order.count == 1 %>
+$("submit_minus_<%= @order.delivery.id %>").update('<input id="order_submit" name="commit" type="submit" value="-" />')
+<% end %>

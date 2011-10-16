@@ -1,0 +1,6 @@
+<% unless @order.nil? %>
+$("delivery_id_<%= @order.delivery.id %>").update('<%=@order.count%>')
+   <% if @order.count == 0 %>
+   $("submit_minus_<%= @order.delivery.id %>").update('')
+   <% end %>
+<% end %>

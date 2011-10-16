@@ -60,6 +60,20 @@ describe OrdersController do
       post 'increase', :id=> @account.id, :order => order1 
       Order.find_by_account_id_and_delivery_id(@account.id, @del1.id ).count.should == 6
     end
+
+    it "should create the order with count 1 if it is 0 using ajax" do
+      test_sign_in(@employer)
+      lambda do
+        xhr :post, 'increase', :id=> @account.id, :order => @attr 
+      end.should change(Order, :count).by(1)
+    end
+
+    it "should increase order count by 1 if it exists using ajax" do
+      test_sign_in(@employer)
+      order1 = Factory(:order,:user => @employer,:account => @account,:delivery => @del1, :count => 5)
+      xhr :post, 'increase', :id=> @account.id, :order => order1 
+      Order.find_by_account_id_and_delivery_id(@account.id, @del1.id ).count.should == 6
+    end
   end
 
   describe "'decrease'" do
@@ -111,6 +125,28 @@ describe OrdersController do
       test_sign_in(@employer)
       order1 = Factory(:order,:user => @employer,:account => @account,:delivery => @del1, :count => 5)
       post 'decrease', :id=> @account.id, :order => order1 
+      Order.find_by_account_id_and_delivery_id(@account.id, @del1.id ).count.should == 4
+    end
+
+    it "should do nothing if order has count 0 using ajax" do
+      test_sign_in(@employer)
+      lambda do
+        xhr :post, 'decrease', :id=> @account.id, :order => @attr 
+      end.should change(Order, :count).by(0)
+    end
+
+    it "should destroy order if has count 1 using ajax" do
+      test_sign_in(@employer)
+      order1 = Factory(:order,:user => @employer,:account => @account,:delivery => @del1, :count => 1)
+      lambda do
+        xhr :post, 'decrease', :id=> @account.id, :order => @attr 
+      end.should change(Order, :count).by(-1)
+    end
+
+    it "should decrease order count by 1 if count > 1 using ajax" do
+      test_sign_in(@employer)
+      order1 = Factory(:order,:user => @employer,:account => @account,:delivery => @del1, :count => 5)
+      xhr :post, 'decrease', :id=> @account.id, :order => order1 
       Order.find_by_account_id_and_delivery_id(@account.id, @del1.id ).count.should == 4
     end
   end
